@@ -288,3 +288,172 @@ _Weird office chair_
 - Ecocentrism 
 - Suboptimality can be desired for error tolerance.
 - modular, decentralised and diverse systems are intrinsically error friendly
+
+#pagebreak()
+= Guest Lecture: Apple
+
+lol confidential.
+
+== Apple Pencil 2nd Gen + Domain Expertise
+
+
+
+== HW Design Cycle + xfunc collab
+
+
+
+== How apple is ORGANISED FOR INNOVATION (probably bs)
+
+
+
+== A day in the life...
+
+== What we look for...
+
+#pagebreak()
+= Guest Lecture: 
+
+== B2C/B2B
+
+Business to Business
+- ROI matters a lot
+- Customers need to be educated
+- Content needs to be in depth
+- A long chain of command
+- Longer buying cycles
+
+Business to Customer
+- More about branding
+- Industry jargon unnecessary
+- Emotionally driven
+- Ad copies ar emore fun
+
+RFP: Compares
+RFQ: Quantifies
+
+= Guest Lecture: Navigating the Human Element
+Subtitle: Lessons from failed & sucessful projects
+Presenter: Winnie Sowerby
+
+== Bio
+
+Worked on
+- Motorola DragonBell
+- Navman
+
+Roles performed
+- Engineer
+- Project Manager
+- Suppliers
+- Clients & Stakeholders
+- Trainers
+- UX Researcher
+- Testing
+
+== Project
+
+#quote[A project is a series of structured tasks, activities, and deliverables
+that are carefully executed to achieve a desired outcome.]
+
+Key constraints
+- Scope
+- Time
+- Cost
+
+Project Phases Phases
+- Initiate
+- Plan
+- Execute
+- Monitor & Control
+- Close
+
+Agile (easy to change but hard to define)
++ Define
++ Design
++ Build & test
++ Measure
++ Repeat from step 1
+
+Waterfall (hard to change but easier to define)
++ Define
++ Design
++ Build
++ Test
++ Operate
+
+Sucessful project
+- Quality
+- On time
+- Within budget
+
+Reasons why projects fail
+- Fail to meet business justification
+- Poorly defined goals and outcomes
+- Product does not meet needs
+- Inadequate project governance
+- Inadequate planning
+- Poor communications
+- Poorly defined requirements
+- Insufficients skills
+- Scope creep
+- Poor risk management 
+
+== Humans in porjects
+
+Refinement team focuses on
+- identifiying
+- designing
+- validating
+solutions to meet objectives
+
+Development team implements the solution
+
+Build a team
+- Psychological safety
+- Dependability
+- Structure and clarity
+- Meaning
+- Impact
+
+Four things
+- Safety
+- Clarity
+- Communcations
+- Supports
+
+= Guest Lecture: Client Proposal
+
+Business Profile
+- Business Activity
+- Products/Servies
+- Type of Opportunity
+- Uniqueness
+- Growth Potential
+- Vision, Mission, Objectives
+
+Identify cultural issues (like dietary restrictions)
+
+Operations
+- Business Location (location, location location)
+- Product/Service Process
+- Resource Requirements
+- Supplier
+
+Markets
+- Market Size
+- Target Market
+- Markent Trend
+
+research useful to find out 
+
+Factors to consider for target market
+- Age
+- Gender
+- Material Status
+- Income Level
+- Education Level
+- Occupation
+- Geographical Location
+- Ethnic Background
+- Attitudes
+- Values

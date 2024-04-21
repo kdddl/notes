@@ -1,16 +1,18 @@
 #let todo(body, fill: red) = {
   block(
-	width: 100%,
-	inset: 5pt,
-    stroke: 2pt + fill,
-	text(fill: fill, weight: "bold", [TODO: ] + body)
+  	width: 100%,
+  	inset: 5pt,
+      stroke: 2pt + fill,
+  	text(fill: fill, weight: "bold", [TODO: ] + body)
   )
 }
 
 #let code(it, code_colour, highlight: ()) = {
+  v(-0.5em)
   let x = it.text.split("\n").enumerate();
+  set text(font: "Ubuntu Mono", size: 1em)
   let content = ();
-  let size_line = 20pt;
+  let size_line = 2em;
   let size_code = 100% - size_line;
   for (i, line) in x {
     let num = str(i+1);
@@ -22,9 +24,7 @@
         fill: rgb(code_colour.at(0)),
         width: size_line,
         text(
-          font: "Ubuntu Mono",
           fill: code_colour.at(3), 
-          size: 11pt,
           num,
         )
       ),
@@ -34,9 +34,7 @@
         fill: rgb(code_colour.at(0)),
         width: size_code,
         text(
-          font: "Ubuntu Mono",
           fill: code_colour.at(5), 
-          size: 11pt,
           align(start, raw(line, lang: it.lang)),
         )
       )
@@ -59,20 +57,20 @@
         stroke: 1pt + code_colour.at(1),
         inset: 2pt,
         width: 100%,
-        height: auto,
+        height: 1em,
         fill: code_colour.at(1),
         align(
           end, 
           text(
-            font: "Ubuntu Mono",
             fill: code_colour.at(4),
-            size: 11pt,    
-            it.lang          
+            it.lang,       
+            size: 1em,
           )
         )
       )
     }
   )
+  v(-0.5em)
 }
 
 #let conf(
@@ -99,7 +97,7 @@ show raw.where(block: true): it => {
 
 show raw.where(block: false): it => text(
   font: "Ubuntu Mono",
-  size: 11pt,
+  size: 1.1em,
   it,
 )
 

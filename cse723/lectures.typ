@@ -1,7 +1,6 @@
 #import "../common.typ": conf, todo
 #import "../themes/gruvbox_dark.typ"
 #show: doc => conf(gruvbox_dark.colour, gruvbox_dark.colour, doc)
-
 = Lecture 1: Introduction
 
 - prerequisite know _C_
@@ -515,3 +514,142 @@ Binary Semaphores
 
 Counting Semaphores
 - queue multiple events, do thing x number of times
+
+= Assignment 1
+
+ADC --> Averaging Filter --> Symmetry Function --> Peak detection
+
+These are summed up into a Frequency Analysis Unit (FAU) except for the ADC.
+The FAU has a interface of `count` the number of clock cycles from the peak and
+`peak` that is high when a peak is detected.
+
+Hard to measure frequency from signal with a lot of harmonics. Use peaks rather
+than zero crossings.
+
+Sampling frequency & resolution of ADC
+
+ISR on peak signal that gets count
+
+= Lecture 2: Software based ERTS
+
+== Modular Implementation
+
+Techniques
+- Subroutine (hierarchical and sequential)
+- Coroutine (symmetric and sequential or asymmetric and sequential)
+	- Symmetric coroutines: yield to each other
+- Processes/tasks (symmetric and concurrent)
+
+== Example: Process Controller
+
+every 20 ms execute clock_module
+every 40 ms execute control_module
+
+do sometime display, operator_input, mgmnt_output
+
+Observations of single program approach
+- Each function called in the infinite loop represents an independent task
+- Each task must return in a reasonable time
+
+== Foreground/Background Approach
+
+- Interrupt on clock signal handles clock_module and control_module (Foreground)
+- other display, operator_input and mgmnt_output are running while system is not
+	interrupted  (Background)
+
+== Processes vs. Threads
+
+Processes
+- Own virtual address space (stack, data, code)
+- System resources
+
+Thread
+- Subprocess
+- Only program coutner, stack and register
+- Shares virtual address space
+- Small & low cost
+
+== Types of Scheduling
+
+Rate Monotonic 
+- Processes with shorter periods have higher priority
+- Typically used when execution deadline = period
+
+Deadline Monotonic
+- Processes with shorter deadlines have higher priority
+- Typically used when execution deadline \< period
+
+= Lecture 6: Resource Access Control
+
+== RTOS Tasks
+
+*Non-Preemptive*: Task yields voluntarily \
+*Preemptive*: RTOS switches because of higher priority task
+
+RTOS tasks run in the same memory space so are more like threads.
+
+Reentrancy: If a function can be entered simultaneously by multiple tasks.
+- Can be comprised by non atomic operations
+
+== Mutual Exclusion
+
+Ensuring Mutual Exclusion
+- Disable interrupts: interrupts otherwise atomic operations
+- Test & Set: obtains value of memory location and sets it to one in one
+	instruction
+- Disable scheduling: prevent scheduler from preempting process
+- Use of semaphores
+
+== Problems with Semaphores - Deadlock
+
+- Taking wrong semaphore
+- Forgetting to take semaphore
+- Not releasing semaphore
+- Taking semaphore for 'too long'
+
+Deadlock can occur if two tasks want mutually exclusive access to two resources
+in a nested fashion but in reverse order
+
+```c
+void task_2() {
+	mutex_acq(a); // <-- Start here but switch to line 12
+	mutex_acq(b);
+
+	do_shit();
+	
+	mutex_acq(a);
+	mutex_acq(b);
+}
+
+void task_2() {
+	mutex_acq(b); // go here and now DEADLOCK!!!
+	mutex_acq(a);
+
+	do_shit();
+	
+	mutex_acq(b);
+	mutex_acq(a);
+}
+
+```
+
+= Lecture 7: Intertask Communication and Synchronisation
+
+== Approaches for synchronisation between tasks
+- Synchronisation semaphore
+- Event flags
+- Global variables
+- Message mailboxes
+- Message queues
+- Pipes
+
+== Synchronisation Semaphores
+
+When two tasks synchronise by using two semaphores this is called bilateral rendezvous.
+Both tasks synchronise
+
+== Task Communication
+
+*Message Mailboxes*
+
+Message queue
