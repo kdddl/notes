@@ -645,11 +645,15 @@ void task_2() {
 
 == Synchronisation Semaphores
 
-When two tasks synchronise by using two semaphores this is called bilateral rendezvous.
-Both tasks synchronise
+When two tasks synchronise by using two semaphores this is called bilateral
+rendezvous. Both tasks synchronise
 
 == Task Communication
 
 *Message Mailboxes*
 
 Message queue
+
+= Lecture 9: Designing Software in SystemJ
+
+
