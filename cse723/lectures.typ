@@ -657,3 +657,211 @@ Message queue
 = Lecture 9: Designing Software in SystemJ
 
 
+= Lecture: Modelling Embedded Systems using Esterel
+
+_Reactivity_: An output for every input
+_Determinism_: Same input results in same outputs 
+
+#quote[Esterel is just FSMs]
+
+_cartesian product_
+
+= Lecture: Esterel: Signals and Sensors
+
+== Modules and Submodules
+
+```
+module f: // like function
+	input A, B; // interface
+	output O;
+
+	// behaviour
+
+end module;
+```
+
+`run` instantiates a module and binds signals to it
+
+
+== Signals and Variables
+
+
+=== Pure Signals
+
+$O_2 = overline(I_1)$ \
+$O_1 = I_1$
+
+Programs are non reactive if do not use all signals
+
+$O_1 = A B$ \
+$O_2 = overline(A B)$
+
+#import "@preview/finite:0.3.0": automaton
+
+#automaton((
+  s0: (s1:"T / O1"),
+  s1: (s2:"T / O2"),
+  s2: (s3:"T / O1, O2"),
+  s3: (),
+))
+
+=== Valued Signals
+
+```
+esterel O(100);
+```
+
+Example
+```
+output o1 := 0
+await tick;
+emit o1(200);
+```
+Output
+```rust
+(false, 0)
+(true, 200)
+```
+
+`?` before a valued signal represents its value
+
+associative and commutative function are deterministic combination function
+
+can't emit twice in one transition
+
+= Lecture: Statecharts & SyncCharts
+
+== Reducing FSMs
+
++ remove self loops
++ group states hierarchically
+
+TL
+- main
+	- HWinit
+	- initiate moves
+	- process request
+- robot
+	- rinit
+	- rwait
+	- xm-moveA
+	- ym-moveA
+- motor 0
+	- M0init
+	- Wait0
+	- Ymove
+- motor 1
+	- M1init
+	- Wait0
+	- Xmove
+
+*And-or tree*
+and: both are concurrent represented by circle between branches
+or: sequential
+
+exam has statechart => fsm
+
+TL
++ B
+	- D
+		+ F
+		+ G
+	- E
+		+ H
++ C
+	+ I
+	+ J
+	+ K
+
+== SyncCharts
+
+Strong aborts marked by red circle at the start of the arrow
+strong aborts immediately transition to the next state
+
+#automaton((
+  off: (off:"!T / off", on:"T / on"),
+  on: (on:"!T / on", off:"T / off"),
+))
+
+```esterel
+loop
+	abort
+		loop
+			emit OFF;
+			pause;
+		end loop;
+	when T;
+
+	abort
+		loop
+			emit ON
+			pause;
+		end loop;
+	when T;
+end loop;
+```
+
+```esterel
+loop 
+	abort
+		sustain OFF;
+	when T;
+
+	abort 
+		sustain ON;
+	when T;
+end loop;
+```
+
+Weak aborts
+
+#automaton((
+  off: (off: "!T / off", on: "T / off, on"),
+  on: (on: "!T / on", off: "T / on, off"),
+))
+
+FSMs
+
+#automaton((
+  idle: (idle: "!T", wait: "T / Rq"),
+  wait: (wait: "!G / Rq", busy: "G / Rq, Rn"),
+	busy: (busy: "!S / Rn", idle: "S / Rl"),
+))
+
+SyncCharts has transition priority
+
+In esterel nested aborts has transition priority
+Dummy states indicate an state machine is finished: useful for concurrent state
+machines within a state machine.
+
+= Exam Prep: Zoran
+
+zoran questions may be more like ncea xd
+- structure and presentation matter :(
+- proper use of terminology but use own terminology
+- understanding of:
+	- concurrent behaviours and systems
+	- embedded system design
+	- hw/sw codesign
+	- rtos approach
+	- language approach (oh no)
+	- synchronisation mechanisms
+	- communication mechanisms
+
+Question 'themes'
+- embedded systems and concurrency
+	- techniques for modular embedded systems
+	- concurrency decomposition
+- realtime operating systems approach to embeddded systems design
+- concurrent programming apporach to embedded system design
+	- SYSTEMJ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	- :sob: :gun:
+	- GALS GALS GALS
+	- KERNEL STATEMENT -- DON'T TRY TO REMEMBER BUT INTERPRET??? oh ok we get the
+		table
+	- JAVA IN SYSTEMJ?
+	- built in obj in systemj
+
+maybe don't do 704... SYSTEMJJJJJJ
+ok second part sounds fun
+survive first part
