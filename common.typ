@@ -79,8 +79,12 @@
 	doc,
 ) = {
 
+set math.mat(delim: "[")
+set math.vec(delim: "[")
+
 set page(
-  fill: colour.at(0)
+  fill: colour.at(0),
+  margin: 15mm,
 )
 
 set text(

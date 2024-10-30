@@ -1,0 +1,80 @@
+#import "../common.typ": *
+#import "../themes/gruvbox_dark.typ"
+#show: doc => conf(gruvbox_dark.colour, gruvbox_dark.colour, doc)
+
+= Erlang-B
+
+== Assumptions
+- Statisical equilibrium -- the chance to enter a state is the same as the
+  chance to leave a state
+- Random call arrival and holding time
+- Number of callers is much greater than the number of lines
+- Full availability -- any call can connect to any free line
+
+== Formula
+
+#table(
+  columns: 2,
+  [Proability of being blocked given there are $N$ lines where $A$ is traffic offered],
+  [$ E_N (A) = (A^N/N!)/(sum_(n = 0)^N A^n/n!) $],
+  [Probability of being in state $i$],
+  [$ E_i (A) = (A^i/i!)/(sum_(n = 0)^N A^n/n!) $],
+  [Relation between states],
+  [$ [i + 1] = [i] A/(i+1) $],
+)
+
+$ A = y s $
+where:
+- $A$ traffic in erlangs
+- $y$ mean call arrival rate
+- $s$ mean call holding time
+
+= Signal Space
+
+== Orthogonality and Orthonormality
+
+Two vectors are othogonal if the dot product is zero. \
+$bold(a) dot.c bold(b) = 0$
+$ bold(a) dot.c bold(b) = sum^n_(i=1) a_i b_i $
+
+orthogonality is true for a system of signals if they satisfy
+$ E_(s_i) =  sum^N_(j = 1) s_(i j) sum^N_(k = 1) s_(i k) integral^T_0 phi_j (t)
+phi_k (t) " d"t $
+
+Energy calculation -- normal if signal has unit energy
+$
+  E_i = integral^T_0 s_i^2 (t) " d"t 
+$
+
+= BPSK/QPSK
+
+$ E_b = (A_b^2 T_b)/(2) $
+$ A_b = sqrt((2E_b)/(T_b)) $
+
+$ P_e = 1/2 "erfc" (sqrt(E_b/N_0)) $
+
+= Information Theory
+
+==  Entropy 
+
+information associated with an event $I_a = -log_2(P_A)$
+
+information entropy $H = sum_(i = 1)^n P_i log_2 1/P_i$
+
+== Shannon's Theorem
+
+rate of information transmission $R = r H "bits per second"$ where $r$ is symbol
+rate.
+
+The limiting rate of information transmission through a channel is called the
+_channnel capacity_ $C$. This is called Shannon's Theorem. $R <= C$.
+
+$C = B log_2 (1 + S/N)$
+where 
+- $B$ channel bandwidth
+- $S/N$ mean square signal to noise ratio
+
+== Hamming codes
+
+syndrome vector $s = r H^T = e H^T$ \
+codeword $bold(c) = bold(m) bold(G)$
