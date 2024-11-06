@@ -314,3 +314,17 @@ Peak detector: No idea (wah wah wah)
 
 Develop protocol for configuration of ASPs.
 
+== Zoran Q&A Disaster
+
+opcodes are in recop related files (vhdl constants)
+nope has to be multicycle xd
+recasm
+check if SIP & SOP are in Recop related files, they are basically fancy
+registers but whatever
+
+instruction cycles (3 clock cycle)
+- fetch 
+- decode
+- execution
+
+PC must start at zero

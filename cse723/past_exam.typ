@@ -214,10 +214,10 @@ S1 -------> S2 -------> S3
 #import "@preview/finite:0.3.0": automaton
 
 #automaton((
-  s13: (s14: "b", s23: "a"),
+  s13: (s24: "a & b", s14: "b", s23: "a", ),
   s14: (s23: "a"),
   s23: (s14: "b"),
-  // s24: (s14: "b", s23: "a"), can't be reached
+  s24: (s14: "b", s23: "a", s13: "a & b"),
 ))
 
 === b
@@ -232,8 +232,9 @@ three differences between statecharts and esterel
 
 ```esterel
 pause;
-await A;
+await immediate A;
 emit O;
+halt;
 ```
 
 == 6
@@ -241,7 +242,7 @@ emit O;
 === a
 
 #automaton((
-  idle: (wait: ""),
+  idle: (wait: "/Rq"),
   wait: (wait: "!G/Rq", busy: "G/Rq"),
   busy: (busy: "!S/Rn", idle: "S/Rl"),
 ))
@@ -252,12 +253,314 @@ emit O;
 
 // idle
 ```
-await T;
-weak abort 
-  sustain Rq;
-when G;
-abort
-  sustain Rn;
-when S;
-emit RI;
+loop
+  await immediate T;
+  weak abort 
+    sustain Rq;
+  when G;
+  abort
+    pause; % why do I need this 
+    sustain Rn;
+  when S;
+  emit Rl;
+  pause;
+end loop;
+```
+
+#pagebreak()
+= 2022
+
+== 1
+
+=== a
+
+```
+ADC --> Averaging Filter --> Corellator --> Peak Detector --> Nios
+```
+Peak detector outputs a ready signal and a number of samples. Hardware
+implemented components are faster which allows to for us to meet the real time
+requirements for measuring frequency in real time.
+
+- 2 cycles for frequency
+- 3 cycles for rocf
+- each cycle after than can generate new frequency value and rate of change
+
+
+Does he want us to just draw a conceptual diagram like for our assignment?
+ISRs are used to get critical input for llike whe the FAU is ready
+
+=== b
+
+hardware mechanism could cover:
+- interrupts
+- ports
+- size
+- protocol
+- ready/ack
+
+#todo[honestly no idea what he wants here]
+
+=== c
+
+In unilateral rendezvous one semaphore is used to signal another task.
+In bilateral rendezvous one semaphore is used to signal another task and waits
+for the other task to use another semaphore to signal back.
+
+Unilateral rendezvous
+```rust
+fn task_0() {
+  // do stuff
+  signal(a);
+  // do stuff
+}
+
+fn task_1() {
+  // do stuff
+  wait(a);
+  // do stuff
+}
+```
+
+Bilateral rendezvous
+```rust
+fn task_0() {
+  // do stuff
+  signal(a);
+  wait(b);
+  // do stuff
+}
+
+fn task_1() {
+  // do stuff
+  signal(b);
+  wait(a);
+  // do stuff
+}
+```
+
+Bilateral rendezvous in hardware usually uses ready and acknowledge signals. 
+Which can be related to binary semaphores in this case so yes.
+
+== 2
+
+=== a
+
+*same question*
+
+The task runs a delay for a period of time that means the task can be released
+and the scheduler can activate it again when the time expires.
+
+moving processing from the ISRs to the event handlers allow other ISRs to occur
+and tasks to run or preempt the event handler if they are more important making
+the system respond faster.
+
+the period of the task could be considered to be the minimal time between two
+events as this can then service every event. *same question*
+
+=== b
+
+ISRs cannot wait for semaphores to be released so they should not be used within
+a ISR shared memory can be used as long as you account for the ISR can interrupt
+the task but the task cannot interrupt the ISRs so you may need to disable
+interrupts within the section accessed by the task.
+
+#todo[discuss with someone else]
+
+=== c
+
+*same question*
+
+A preemptive RTOS will reconsider if another task is unblocked and is higher
+priority when it is finished while a non preemptive RTOS will continue the task
+that was interrupted. Interrupts can induce priority inversion (but can also
+just be periodic??). Interrupts could also be less important than a task and
+cause priority inversion that way.
+
+#todo[unwanted effects]
+
+Could lead to switching between more tasks
+
+*same question*
+
+== 3
+
+=== a
+
+- reactions
+- reactions can contain reactions
+
+*same question*
+
+The time is always bound by the longest reactions if on different processors
+on one processor the time is added together.
+
+=== b
+
+Channels!!!! *same question*
+
+Lifetime of emitted signal is one tick \
+Emitted signal change status and value in the tick after they were emitted and
+the status will change again two tick after it was emitted to not present if
+it was not emitted again. There is no global notion of time in SystemJ as clock
+domains are asynchronous and can not interact. Time within a clock domain is
+_logical_ and is based on ticks when that happen when all reactions finish. A
+clock domain does not have knowledge of time of other clock domains except using
+when using channels as they have to synchronise.
+
+Reactions within a clock domain communicate with signals. `emit ID[(expr)]` and
+`#ID` are used to communicate with signals. *channelssssss* 
+
+#todo[illustrate how]
+
+=== c
+
+== 4
+
+=== a
+
+#automaton((
+  s02: (s03: "I1/C", s13: "!I1/{C, A}"),
+  s03: (s03: "I1&!I2", s02: "I1&I2/D", s13: "!I1&"),
+  s12: (),
+  s13: (),
+))
+
+*did on paper*
+
+== 5
+
+=== a
+
+simplified code
+```esterel
+pause;
+present pre(S) then
+  emit S;
+else
+  emit A;
+end present;
+```
+
+== 6
+
+=== b
+
+- graphical
+- non deterministic
+
+
+= 2019
+
+== 1
+
+=== b
+
+Message Passing
+- needs more system resources
+- requires kernel involvement
+- message passing immutable data
+- involves copying data
+- pass by value
+
+Shared memory 
+- shares mutable data
+- pass by reference
+
+Message passing
+```rust
+fn produce(channel: Channel) {
+  let data = produce_data();
+  channel.send(data);
+}
+
+fn consume(channel: Channel) {
+  let data = channel.recv();
+  consume_data(data);
+}
+```
+
+Shared memory (with semaphores)
+```
+produce(semaphore, data) {
+  semaphore.acquire();
+  data = produce_data();
+  semaphore.release();
+}
+
+consume(semaphore, data) {
+  semaphore.acquire();
+  consume_data(data);
+  semaphore.release();
+}
+```
+
+Shared memory require less overhead and therefore less resources than message
+passing so it can be beneficial with more strict resource constraints or large
+amounts of data. Message passing, however, scales betters and its immutability
+often makes it safer.
+
+== 4
+
+=== b
+
+```
+loop
+  present I then
+    abort 
+      loop 
+        emit M;
+        pause;
+      end loop;
+    when Q;
+  end present; 
+  pause;
+end loop;
+```
+
+== 5
+
+=== b
+
+==== i
+
+differences between asynch and sync composition
+- number of transitions
+- asynch is non deterministic
+- synchronous must make two transition at a time
+
+asynchronous composition is preferable for:
+- non real time operating systems
+- distributed systems
+
+synch composition preferable for:
+- aerospace 
+- implantable medical devices
+
+== 6
+
+=== b
+
+Statechart and SyncCharts similarities
+- both graphical
+- have hierarchy of states
+- aborts
+
+differences
+- synccharts synchronous
+- and deterministic
+
+= arbiter esterel
+
+```
+pause;
+present Rq1 then
+  abort 
+    sustain G1;
+  when Rl1
+end if;
+present Rq2 then
+  abort 
+    sustain G2;
+  when Rl2
+end if;
 ```

@@ -35,6 +35,7 @@
         width: size_code,
         text(
           fill: code_colour.at(5), 
+          size: 11pt,
           align(start, raw(line, lang: it.lang)),
         )
       )
