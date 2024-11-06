@@ -78,3 +78,16 @@ where
 
 syndrome vector $s = r H^T = e H^T$ \
 codeword $bold(c) = bold(m) bold(G)$
+
+= OSI Model
+
+#table(
+  columns: 2,
+  [Application], [end-user access],
+  [Presentation], [transform input data for rest of system],
+  [Session], [control structure for communication between two communicators],
+  [Transport], [control of the mesages exchanged between users],
+  [Network], [routing of packets through the network],
+  [Data Link Control], [error control for transfers],
+  [Physical], [physical transmission of data],
+)
